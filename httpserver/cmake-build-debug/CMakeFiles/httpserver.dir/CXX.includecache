@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.cpp
+http.h
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
+
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
+errno.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/main.cpp
+iostream
+-
+sys/socket.h
+-
+sys/stat.h
+-
+sys/types.h
+-
+unistd.h
+-
+netdb.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+http.h
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
+

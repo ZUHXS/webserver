@@ -1,0 +1,4 @@
+/usr/local/Cellar/cmake/3.10.0/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/zuhxs/Documents/GitHub/webserver/httpserver
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /Users/zuhxs/Documents/GitHub/webserver/httpserver/cmake-build-debug
