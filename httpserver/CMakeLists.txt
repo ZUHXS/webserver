@@ -3,5 +3,5 @@ project(httpserver)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp http.cpp http.h)
+set(SOURCE_FILES main.cpp http.cpp http.h fastcgi.cpp fastcgi.h)
 add_executable(httpserver ${SOURCE_FILES})

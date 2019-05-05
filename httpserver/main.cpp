@@ -10,6 +10,7 @@
 
 
 //char *USAGE = "Usage: ./webserver web/ --port 8000\n";
+const char *workspace = "/Users/zuhxs/Downloads/web";
 
 int server_port;
 char *server_files_directory;
@@ -17,28 +18,30 @@ int server_fd;
 #define MAX_BUF 4096
 
 
-
 void handle_files_request(int fd) {
-    HTTP *request = new HTTP(fd);
-    printf("method: %s\npath: %s\ncurrent file: %s\n", request->get_method(), request->get_path(), server_files_directory);
-    char *file_path;
-    asprintf(&file_path, "%s%s", server_files_directory, request->get_path());
-    FILE *file = fopen(file_path, "r");
-    free(file_path);
-    if (!file) {
-        request->start_response(404);
+    HTTP *request = new HTTP(fd, workspace);
+    printf("method: %s\nuri: %s\ncurrent file: %s\n", request->get_method(), request->get_uri(), server_files_directory);
+    if (request->dynamic_info()){  // dynamic
+
     }
     else {
-        char *buf = (char *)malloc(MAX_BUF);
-        request->start_response(200);
-        request->http_send_header("Content-Type", request->http_get_mime_type());
-        request->http_end_header();
-        int readn;
-        while((readn = fread(buf, 1, MAX_BUF, file)) > 0) {
-            request->http_send_data(buf, readn);
+        FILE *file = fopen(request->get_ab_file_name(), "r");
+        if (!file) {
+            printf("dynamic\n");
+            request->start_response(404);
+        }
+        else {
+            printf("static\n");
+            char *buf = (char *)malloc(MAX_BUF);
+            request->start_response(200);
+            request->http_send_header("Content-Type", request->http_get_mime_type());
+            request->http_end_header();
+            int readn;
+            while((readn = fread(buf, 1, MAX_BUF, file)) > 0) {
+                request->http_send_data(buf, readn);
+            }
         }
     }
-
 }
 
 void serve_forever(int *socket_number) {

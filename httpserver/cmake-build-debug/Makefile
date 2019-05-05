@@ -123,6 +123,33 @@ httpserver/fast:
 	$(MAKE) -f CMakeFiles/httpserver.dir/build.make CMakeFiles/httpserver.dir/build
 .PHONY : httpserver/fast
 
+fastcgi.o: fastcgi.cpp.o
+
+.PHONY : fastcgi.o
+
+# target to build an object file
+fastcgi.cpp.o:
+	$(MAKE) -f CMakeFiles/httpserver.dir/build.make CMakeFiles/httpserver.dir/fastcgi.cpp.o
+.PHONY : fastcgi.cpp.o
+
+fastcgi.i: fastcgi.cpp.i
+
+.PHONY : fastcgi.i
+
+# target to preprocess a source file
+fastcgi.cpp.i:
+	$(MAKE) -f CMakeFiles/httpserver.dir/build.make CMakeFiles/httpserver.dir/fastcgi.cpp.i
+.PHONY : fastcgi.cpp.i
+
+fastcgi.s: fastcgi.cpp.s
+
+.PHONY : fastcgi.s
+
+# target to generate assembly for a file
+fastcgi.cpp.s:
+	$(MAKE) -f CMakeFiles/httpserver.dir/build.make CMakeFiles/httpserver.dir/fastcgi.cpp.s
+.PHONY : fastcgi.cpp.s
+
 http.o: http.cpp.o
 
 .PHONY : http.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... httpserver"
+	@echo "... fastcgi.o"
+	@echo "... fastcgi.i"
+	@echo "... fastcgi.s"
 	@echo "... http.o"
 	@echo "... http.i"
 	@echo "... http.s"

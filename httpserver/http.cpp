@@ -4,14 +4,28 @@
 
 #include "http.h"
 
-HTTP::HTTP(int des_fd) {
+HTTP::HTTP(int des_fd, const char *workspace) {
+    this->method = nullptr;
+    this->uri = nullptr;
+    this->version = nullptr;
+    this->ab_file_name = nullptr;
+    this->file_name = nullptr;
+    this->cgiargs = nullptr;
+    this->overall_buffer = nullptr;
+    this->contype = nullptr;
+    this->conlength = nullptr;
+    this->if_dynamic = 0;
+    this->workspace = strdup(workspace);
+
     this->fd = des_fd;
     char *read_buffer = (char *)malloc(LIBHTTP_REQUEST_MAX_SIZE + 1);
     if (!read_buffer)
         this->fatal_error("malloc failed");
     int bytes_read = read(fd, read_buffer, LIBHTTP_REQUEST_MAX_SIZE);
     read_buffer[bytes_read] = 0;
+    this->overall_buffer = read_buffer;
 
+    printf("The buffer read is: \n%s\n\n\nend\n", read_buffer);
     char *start_p, *end_p;
     int read_size;
 
@@ -39,13 +53,12 @@ HTTP::HTTP(int des_fd) {
     read_size = end_p - start_p;
     if (read_size == 0)
         this->fatal_error("Error parsing when getting path");
-    this->path = (char *)malloc(read_size+1);
-    memcpy(this->path, start_p, read_size);
-    this->path[read_size] = 0;
-    if (!strcmp(this->path, "/")) {  // use default path
-        free(this->path);
-        this->path = strdup("/index.html");
-    }
+    this->uri = (char *)malloc(read_size+1);
+    memcpy(this->uri, start_p, read_size);
+    this->uri[read_size] = 0;
+
+    // parse the path
+    this->parse_uri();
 
     // HTTP version & the request line .*
     start_p = end_p;
@@ -53,16 +66,24 @@ HTTP::HTTP(int des_fd) {
         end_p++;
     if (*end_p != '\n')
         this->fatal_error("Error parsing when reading the line");
+    read_size = end_p - start_p;
+    if (read_size == 0){
+        this->fatal_error("Error parsing when getting version");
+    }
+    this->version = (char *)malloc(read_size+1);
+    memcpy(this->version, start_p, read_size);
+    this->version[read_size] = 0;
 
-    free(read_buffer);
+    this->overall_buffer = read_buffer;
+
 }
 
 char* HTTP::get_method() {
     return this->method;
 }
 
-char *HTTP::get_path() {
-    return this->path;
+char *HTTP::get_uri() {
+    return this->uri;
 }
 
 void HTTP::fatal_error(const char *message) const {
@@ -87,7 +108,7 @@ void HTTP::http_end_header() {
 }
 
 const char * HTTP::http_get_mime_type() {
-    char *file_extension = strrchr(this->path, '.');
+    char *file_extension = strrchr(this->uri, '.');
     if (!file_extension) {
         return "text/plain";
     }
@@ -141,4 +162,51 @@ void HTTP::start_response(int status_code) {
 
 void HTTP::http_send_header(const char *key, const char *value) {
     dprintf(this->fd, "%s: %s\r\n", key, value);
+}
+
+// test case: login.php?name=aaa, login.php.text, login.php
+void HTTP::parse_uri() {
+    int length = strlen(this->uri);
+    char *temp_uri = (char *)malloc(length);
+    strcpy(temp_uri, this->uri);
+
+    char *temp_test = strstr(temp_uri, ".php");
+    if (!temp_test) {  // static
+        this->if_dynamic = 0;
+        if (!strcmp(temp_test, "/")) {
+            this->file_name = strdup("/index.html");
+            int ab_file_name_length = strlen(this->file_name) + strlen(this->workspace) + 1;
+            this->ab_file_name = (char *)malloc(ab_file_name_length);
+            strcpy(this->ab_file_name, workspace);
+            strcat(this->ab_file_name, file_name);
+        }
+        else {
+            this->file_name = strdup(temp_uri);
+            int ab_file_name_length = strlen(this->file_name) + strlen(this->workspace) + 1;
+            this->ab_file_name = (char *)malloc(ab_file_name_length);
+            strcpy(this->ab_file_name, workspace);
+            strcat(this->ab_file_name, file_name);
+        }
+    }
+    else {
+        char *p = strchr(temp_uri, '?');
+        if (p) {  // have the argument in the uri
+            strcpy(this->cgiargs, p+1);
+            *p = '\0';
+        }
+        this->file_name = strdup(temp_uri);
+        int ab_file_name_length = strlen(this->file_name) + strlen(this->workspace) + 1;
+        this->ab_file_name = (char *)malloc(ab_file_name_length);
+        strcpy(this->ab_file_name, workspace);
+        strcat(this->ab_file_name, file_name);
+    }
+    free(temp_uri);
+}
+
+bool HTTP::dynamic_info() {
+    return this->if_dynamic;
+}
+
+char* HTTP::get_ab_file_name() {
+    return this->ab_file_name;
 }

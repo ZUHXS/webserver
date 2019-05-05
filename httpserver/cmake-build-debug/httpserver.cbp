@@ -80,6 +80,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.cpp">
+			<Option target="httpserver"/>
+		</Unit>
+		<Unit filename="/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h">
+			<Option target="httpserver"/>
+		</Unit>
 		<Unit filename="/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.cpp">
 			<Option target="httpserver"/>
 		</Unit>

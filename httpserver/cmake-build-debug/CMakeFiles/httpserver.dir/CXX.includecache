@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.cpp
+fastcgi.h
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h
+
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h
+
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/http.cpp
 http.h
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
@@ -20,6 +26,8 @@ stdlib.h
 string.h
 -
 unistd.h
+-
+string
 -
 
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/main.cpp

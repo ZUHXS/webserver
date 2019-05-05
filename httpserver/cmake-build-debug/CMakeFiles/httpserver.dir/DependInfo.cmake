@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.cpp" "/Users/zuhxs/Documents/GitHub/webserver/httpserver/cmake-build-debug/CMakeFiles/httpserver.dir/fastcgi.cpp.o"
   "/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.cpp" "/Users/zuhxs/Documents/GitHub/webserver/httpserver/cmake-build-debug/CMakeFiles/httpserver.dir/http.cpp.o"
   "/Users/zuhxs/Documents/GitHub/webserver/httpserver/main.cpp" "/Users/zuhxs/Documents/GitHub/webserver/httpserver/cmake-build-debug/CMakeFiles/httpserver.dir/main.cpp.o"
   )
