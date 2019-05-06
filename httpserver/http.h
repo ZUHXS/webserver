@@ -31,6 +31,7 @@ private:
     int fd;
 public:
     HTTP(int des_fd, const char *workspace);
+    ~HTTP();
     void fatal_error(const char *message) const;
     char *get_method();
     char *get_uri();

@@ -22,16 +22,15 @@ int server_fd;
 void handle_files_request(int fd) {
     HTTP *request = new HTTP(fd, workspace);
     if (request->dynamic_info()){  // dynamic
-        printf("dynamic\n");
         FASTCGI *cgi = new FASTCGI();
         cgi->request_cgi(request);
         char *result = cgi->recvRecord();
-        printf("\n\n\nrecved: %s\n", result);
+        delete cgi;
         request->start_response(200);
         request->http_send_data(result, strlen(result));
+        free(result);
     }
     else {
-        printf("static\n");
         FILE *file = fopen(request->get_ab_file_name(), "r");
         if (!file) {
             request->start_response(404);
@@ -47,6 +46,7 @@ void handle_files_request(int fd) {
             }
         }
     }
+    delete request;
 }
 
 void serve_forever(int *socket_number) {

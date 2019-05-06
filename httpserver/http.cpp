@@ -262,3 +262,26 @@ char *HTTP::get_conlength() {
 char *HTTP::get_cgi_content(){
     return this->cgi_content;
 }
+
+HTTP::~HTTP() {
+    if (this->workspace)
+        free(this->workspace);
+    if (this->method)
+        free(this->method);
+    if (this->uri)
+        free(this->uri);
+    if (this->version)
+        free(this->version);
+    if (this->ab_file_name)
+        free(this->ab_file_name);
+    if (this->file_name)
+        free(this->file_name);
+    if (this->cgi_content)
+        free(this->cgi_content);
+    if (this->cgiargs)
+        free(this->cgiargs);
+    if (this->conlength)
+        free(this->conlength);
+    if (this->contype)
+        free(this->contype);
+}

@@ -35,7 +35,6 @@ void FASTCGI::fatal_error(const char *message) const {
 }
 
 void FASTCGI::request_cgi(HTTP *hp) {
-
     char *paname[] = {
             "SCRIPT_FILENAME",
             "SCRIPT_NAME",
@@ -58,7 +57,6 @@ void FASTCGI::request_cgi(HTTP *hp) {
 
     // write the data to socket
     write(CGI_sock, &beginRecord, sizeof(beginRecord));
-
 
     // send the arguments
     if (hp->get_ab_file_name() && strlen(hp->get_ab_file_name()) > 0)
@@ -83,6 +81,7 @@ void FASTCGI::request_cgi(HTTP *hp) {
     int l = atoi(hp->get_conlength());
     if (l > 0) {
         char *buf = (char *)malloc(l + 1);
+        char *old = buf;
         int length = strlen(hp->get_cgi_content());
         memcpy(buf, hp->get_cgi_content(), length);
         buf[length] = '\0';
@@ -99,6 +98,7 @@ void FASTCGI::request_cgi(HTTP *hp) {
             // send header
             FCGI_Header *sinHeader = make_header(FCGI_STDIN, cl, pl);
             write(this->CGI_sock, (char *)sinHeader, FCGI_HEADER_LEN);
+            //free(sinHeader);
 
             // send buffer
             write(this->CGI_sock, buf, cl);
@@ -108,6 +108,7 @@ void FASTCGI::request_cgi(HTTP *hp) {
             l -= cl;
             buf += cl;
         }
+        free(old);
     }
 
     // send empty params
@@ -149,6 +150,7 @@ void FASTCGI::sendParamsRecord(char *name, int nlen, char *value, int vlen) {
 
     FCGI_Header *nvHeader = make_header(FCGI_PARAMS, cl, pl);
     memcpy(buf, (char *)nvHeader, FCGI_HEADER_LEN);
+    free(nvHeader);
     buf = buf + FCGI_HEADER_LEN;
 
     if (nlen < 128) { // name长度小于128字节，用一个字节保存长度
@@ -174,14 +176,13 @@ void FASTCGI::sendParamsRecord(char *name, int nlen, char *value, int vlen) {
     memcpy(buf, value, vlen);
 
     write(this->CGI_sock, old, FCGI_HEADER_LEN + cl + pl);
-
     free(old);
-
 }
 
 void FASTCGI::sendEmptyParamsRecord() {
     FCGI_Header *emHeader = make_header(FCGI_PARAMS, 0, 0);
     write(this->CGI_sock, (char *)emHeader, FCGI_HEADER_LEN);
+    free(emHeader);
 }
 
 char *FASTCGI::recvRecord() {
@@ -214,6 +215,7 @@ char *FASTCGI::recvRecord() {
                 read(CGI_sock, buf, responHeader.paddingLength); // read buffer
             }
             fprintf(stderr, "%s", errlog);
+            free(errlog);
         }
         else if (responHeader.type == FCGI_END_REQUEST) {
             read(CGI_sock, &endr, sizeof(FCGI_EndRequestBody));
