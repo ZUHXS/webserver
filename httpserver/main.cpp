@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include "http.h"
+#include "fastcgi.h"
 
 
 //char *USAGE = "Usage: ./webserver web/ --port 8000\n";
@@ -22,16 +23,21 @@ void handle_files_request(int fd) {
     HTTP *request = new HTTP(fd, workspace);
     printf("method: %s\nuri: %s\ncurrent file: %s\n", request->get_method(), request->get_uri(), server_files_directory);
     if (request->dynamic_info()){  // dynamic
-
+        printf("dynamic\n");
+        FASTCGI *cgi = new FASTCGI();
+        cgi->request_cgi(request);
+        char *result = cgi->recvRecord();
+        printf("\n\n\nrecved: %s\n", result);
+        request->start_response(200);
+        request->http_send_data(result, strlen(result));
     }
     else {
+        printf("static\n");
         FILE *file = fopen(request->get_ab_file_name(), "r");
         if (!file) {
-            printf("dynamic\n");
             request->start_response(404);
         }
         else {
-            printf("static\n");
             char *buf = (char *)malloc(MAX_BUF);
             request->start_response(200);
             request->http_send_header("Content-Type", request->http_get_mime_type());

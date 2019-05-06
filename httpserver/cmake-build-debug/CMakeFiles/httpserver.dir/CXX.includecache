@@ -11,6 +11,20 @@ fastcgi.h
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h
 
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h
+arpa/inet.h
+-
+cstring
+-
+netinet/in.h
+-
+cstdio
+-
+cstdlib
+-
+cerrno
+-
+http.h
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
 
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/http.cpp
 http.h
@@ -49,4 +63,6 @@ arpa/inet.h
 -
 http.h
 /Users/zuhxs/Documents/GitHub/webserver/httpserver/http.h
+fastcgi.h
+/Users/zuhxs/Documents/GitHub/webserver/httpserver/fastcgi.h
 

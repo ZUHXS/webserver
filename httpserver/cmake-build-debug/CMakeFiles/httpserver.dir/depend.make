@@ -3,10 +3,12 @@
 
 CMakeFiles/httpserver.dir/fastcgi.cpp.o: ../fastcgi.cpp
 CMakeFiles/httpserver.dir/fastcgi.cpp.o: ../fastcgi.h
+CMakeFiles/httpserver.dir/fastcgi.cpp.o: ../http.h
 
 CMakeFiles/httpserver.dir/http.cpp.o: ../http.cpp
 CMakeFiles/httpserver.dir/http.cpp.o: ../http.h
 
+CMakeFiles/httpserver.dir/main.cpp.o: ../fastcgi.h
 CMakeFiles/httpserver.dir/main.cpp.o: ../http.h
 CMakeFiles/httpserver.dir/main.cpp.o: ../main.cpp
 

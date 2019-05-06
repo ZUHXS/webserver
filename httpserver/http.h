@@ -24,7 +24,7 @@ private:
     char *ab_file_name;
     char *file_name;
     char *cgiargs;  // argument
-    char *overall_buffer;
+    char *cgi_content;
     char *contype;
     char *conlength;
     bool if_dynamic;
@@ -44,6 +44,11 @@ public:
     void parse_uri();
     bool dynamic_info();
     char *get_ab_file_name();
+    char *get_file_name();
+    char *get_cgiargs();
+    char *get_contype();
+    char *get_conlength();
+    char *get_cgi_content();
 };
 
 
