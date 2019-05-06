@@ -21,7 +21,6 @@ int server_fd;
 
 void handle_files_request(int fd) {
     HTTP *request = new HTTP(fd, workspace);
-    printf("method: %s\nuri: %s\ncurrent file: %s\n", request->get_method(), request->get_uri(), server_files_directory);
     if (request->dynamic_info()){  // dynamic
         printf("dynamic\n");
         FASTCGI *cgi = new FASTCGI();
