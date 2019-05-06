@@ -202,6 +202,7 @@ char *FASTCGI::recvRecord() {
             int old_outlen = outlen;
             outlen += cl;
             conBuf = (char *)realloc(conBuf, outlen+1);
+            memset(conBuf, '\0', outlen+1);
             read(CGI_sock, &conBuf[old_outlen], cl);
             if (responHeader.paddingLength > 0) {
                 read(CGI_sock, buf, responHeader.paddingLength);
